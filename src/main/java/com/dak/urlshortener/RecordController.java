@@ -26,10 +26,10 @@ public class RecordController {
     }
 
     @GetMapping("/{shortId}")
-    public RedirectView redirect(RedirectAttributes attributes, @PathVariable String shortId) {
+    public RedirectView redirect(RedirectAttributes attributes, @PathVariable String shortId) { // TODO maybe make this a ModelAndView
         if(map.containsKey(shortId))
             return new RedirectView("http://"+map.get(shortId));
         else
-            return new RedirectView("test");
+            return new RedirectView("test"); //TODO redirect this to some error page?
     }
 }
