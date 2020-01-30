@@ -27,6 +27,9 @@ public class RecordController {
 
     @GetMapping("/{shortId}")
     public RedirectView redirect(RedirectAttributes attributes, @PathVariable String shortId) {
-        return new RedirectView("http://"+map.get(shortId));
+        if(map.containsKey(shortId))
+            return new RedirectView("http://"+map.get(shortId));
+        else
+            return new RedirectView("test");
     }
 }
