@@ -16,7 +16,7 @@ import java.util.HashMap;
 @RestController
 public class RecordController {
 
-    HashMap<String, String> map = new HashMap<>(); //should this go in UrlShortenerApplication? What goes there?
+//    HashMap<String, String> map = new HashMap<>(); //should this go in UrlShortenerApplication? What goes there?
 
     MongoClientURI uri = new MongoClientURI(
             "mongodb+srv://MyMongoDBUser:"+Password.pw+"@mycluster-shdpl.mongodb.net/test?retryWrites=true&w=majority");
@@ -31,7 +31,8 @@ public class RecordController {
 
     @GetMapping("/generate")
     public Record generate(@RequestParam(name = "longUrl") String longUrl , @RequestParam(name = "shortId") String shortId) {
-        map.put(shortId,longUrl);
+//        map.put(shortId,longUrl);
+        //TODO don't allow duplicates
         Document record = new Document("shortId",shortId).append("longUrl",longUrl);
         collection.insertOne(record);
         return new Record(shortId,longUrl);
@@ -40,12 +41,12 @@ public class RecordController {
     @GetMapping("/{shortId}")
     public RedirectView redirect(RedirectAttributes attributes, @PathVariable String shortId) { // TODO maybe make this a ModelAndView
         try {
-            if (map.containsKey(shortId)) {
-                return new RedirectView("http://" + map.get(shortId));
-            } else {
+//            if (map.containsKey(shortId)) {
+//                return new RedirectView("http://" + map.get(shortId));
+//            } else {
                 String longUrl = collection.find(new Document("shortId", shortId)).first().getString("longUrl");
                 return new RedirectView("http://" + longUrl);
-            }
+//            }
         } catch (Exception e) {
                 return new RedirectView("test"); //TODO redirect this to some error page?
         }
