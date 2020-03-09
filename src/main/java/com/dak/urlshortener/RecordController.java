@@ -4,6 +4,7 @@ import com.mongodb.*;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +16,8 @@ import java.util.HashMap;
 
 @RestController
 public class RecordController {
+
+//    @Autowired RecordRepository repository;
 
 //    HashMap<String, String> map = new HashMap<>(); //should this go in UrlShortenerApplication? What goes there?
 
@@ -45,9 +48,11 @@ public class RecordController {
 //                return new RedirectView("http://" + map.get(shortId));
 //            } else {
                 String longUrl = collection.find(new Document("shortId", shortId)).first().getString("longUrl");
+                //TODO before getString, do null check. if null, send to 404 bc no
+            //TODO look into throw Spring 404 error page
                 return new RedirectView("http://" + longUrl);
 //            }
-        } catch (Exception e) {
+        } catch (MongoException e) { //return Mongo error page or something
                 return new RedirectView("test"); //TODO redirect this to some error page?
         }
     }
